@@ -1,0 +1,19 @@
+{
+  "compilerOptions": {
+    "module": "commonjs",
+    "target": "es6",
+    "lib": [
+      "ES6",
+      "ES2016.Array.Include"
+    ],
+    "sourceMap": true,
+    "outDir": "./dist",
+    "typeRoots": [
+      "node_modules/@types",
+      "typings"
+    ]
+  },
+  "include": [
+    "src/**/*"
+  ]
+}
