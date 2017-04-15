@@ -9,6 +9,7 @@ import * as archiver from 'archiver';
 import { green, bold, red } from 'colors/safe';
 import * as filesize from 'filesize';
 import { lstatSync } from 'fs';
+import { readFileSync } from 'fs';
 
 export type WebpackWarPluginOptions = {
   archiveName?: string,
@@ -26,7 +27,7 @@ export class WebpackWarPlugin implements Plugin {
   apply(compiler: Compiler) {
     const context = compiler['context'];
 
-    const archiveBaseName = this.options.archiveName || require(resolve(context, 'package.json')).name;
+    const archiveBaseName = this.options.archiveName || JSON.parse(readFileSync(resolve(context, 'package.json')).toString()).name;
     const archiveName = extname(archiveBaseName) == '' ? `${archiveBaseName}.war` : archiveBaseName;
 
     const additionalElements = (this.options.additionalElements || [])
