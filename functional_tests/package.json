@@ -1,0 +1,22 @@
+{
+  "name": "functional-tests",
+  "version": "0.0.0",
+  "description": "The functional tests for webpack-war-archive",
+  "license": "MIT",
+  "scripts": {
+    "test": "mocha --timeout 10000 --compilers ts:ts-node/register fixture_*/*.func.spec.ts"
+  },
+  "dependencies": {
+    "adm-zip": "^0.4.7",
+    "chai": "^3.5.0",
+    "mocha": "^3.2.0",
+    "shelljs": "^0.7.7",
+    "ts-node": "^3.0.2"
+  },
+  "devDependencies": {
+    "@types/adm-zip": "^0.4.31",
+    "@types/chai": "^3.5.0",
+    "@types/mocha": "^2.2.40",
+    "@types/shelljs": "^0.7.0"
+  }
+}

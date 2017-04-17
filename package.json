@@ -11,7 +11,9 @@
     "build": "tsc",
     "clean": "rimraf dist",
     "test": "mocha --compilers ts:ts-node/register src/**/*.spec.ts",
-    "test:coverage": "nyc yarn run test"
+    "test:coverage": "nyc yarn run test",
+    "pretest:functional": "cd functional_tests",
+    "test:functional": "yarn run test"
   },
   "dependencies": {
     "archiver": "^1.3.0",
