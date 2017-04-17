@@ -10,6 +10,6 @@ module.exports = {
     filename: "[name].js"
   },
   plugins: [
-    new WebpackWarPlugin({webInf: './WEB-INF'})
+    new WebpackWarPlugin({additionalElements: [{path: './META-INF'}, {path: './pom.xml'}, {path: './manifest.xml', destPath: 'dir/man.xml'}]})
   ]
 };
