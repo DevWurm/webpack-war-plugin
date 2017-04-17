@@ -1,0 +1,21 @@
+language: node_js
+node_js:
+  - node
+  - 7
+  - 6
+
+cache: yarn
+
+install:
+  - yarn install
+  - yarn run test:functional:setup
+
+before_script:
+  - yarn run build
+
+script:
+  - yarn run test:coverage
+  - yarn run test:functional
+
+after_success:
+  - yarn run coveralls
