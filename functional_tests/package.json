@@ -4,6 +4,7 @@
   "description": "The functional tests for webpack-war-archive",
   "license": "MIT",
   "scripts": {
+    "setup": "ts-node ./install.ts",
     "test": "mocha --timeout 10000 --compilers ts:ts-node/register fixture_*/*.func.spec.ts"
   },
   "dependencies": {
