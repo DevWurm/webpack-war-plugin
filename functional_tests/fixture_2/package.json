@@ -1,8 +1,8 @@
 {
-  "name": "fixture_1",
+  "name": "fixture_2",
   "version": "0.0.0",
-  "description": "Test fixture just bundling the assets",
-  "main": "fixture_1.func.spec.ts",
+  "description": "Test fixture adding a WEB-INF folder",
+  "main": "fixture_2.func.spec.ts",
   "license": "MIT",
   "private": true,
   "scripts": {
