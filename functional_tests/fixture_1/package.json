@@ -1,0 +1,16 @@
+{
+  "name": "fixture_1",
+  "version": "0.0.0",
+  "description": "Test fixture just bundling the assets",
+  "main": "fixture_1.func.spec.ts",
+  "license": "MIT",
+  "scripts": {
+    "clean": "rimraf dist",
+    "prebuild": "yarn run clean",
+    "build": "webpack --display-error-details"
+  },
+  "dependencies": {
+    "rimraf": "^2.6.1",
+    "webpack": "^2.4.1"
+  }
+}
