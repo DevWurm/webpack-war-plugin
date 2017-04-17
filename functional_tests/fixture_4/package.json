@@ -1,0 +1,17 @@
+{
+  "name": "fixture_4",
+  "version": "0.0.0",
+  "description": "Test fixture adding WEB-INF folder and additional elements",
+  "main": "fixture_4.func.spec.ts",
+  "license": "MIT",
+  "private": true,
+  "scripts": {
+    "clean": "rimraf dist",
+    "prebuild": "yarn run clean",
+    "build": "webpack --display-error-details"
+  },
+  "dependencies": {
+    "rimraf": "^2.6.1",
+    "webpack": "^2.4.1"
+  }
+}
