@@ -1,0 +1,17 @@
+{
+  "name": "fixture_6",
+  "version": "0.0.0",
+  "description": "Test fixture specifying a different archive name, bundling multiple assets, adding a WEB-INF folder and adding additional elements",
+  "main": "fixture_6.func.spec.ts",
+  "license": "MIT",
+  "private": true,
+  "scripts": {
+    "clean": "rimraf dist",
+    "prebuild": "yarn run clean",
+    "build": "webpack --display-error-details"
+  },
+  "dependencies": {
+    "rimraf": "^2.6.1",
+    "webpack": "^2.4.1"
+  }
+}
