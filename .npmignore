@@ -1,0 +1,8 @@
+/.nyc_output
+/coverage
+/functional_tests
+/node_modules
+/src
+.gitignore
+.travis.yml
+tsconfig.json

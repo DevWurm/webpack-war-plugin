@@ -3,12 +3,13 @@
   "version": "1.0.0-beta.1",
   "description": "Webpack plugin for bundling build outputs into a WAR archive",
   "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "repository": "https://github.com/DevWurm/webpack-war-plugin",
   "author": "DevWurm",
   "license": "MIT",
   "scripts": {
     "prebuild": "yarn run clean",
-    "build": "tsc",
+    "build": "tsc -d",
     "clean": "rimraf dist",
     "test": "mocha --compilers ts:ts-node/register src/**/*.spec.ts",
     "test:coverage": "nyc yarn run test",
@@ -59,5 +60,8 @@
     ],
     "sourceMap": true,
     "instrument": true
+  },
+  "peerDependencies": {
+    "webpack": ">2.0.0"
   }
 }
