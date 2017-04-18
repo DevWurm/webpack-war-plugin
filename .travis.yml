@@ -1,21 +1,25 @@
 language: node_js
 node_js:
-  - node
-  - 7
-  - 6
-
+- node
+- 7
+- 6
 cache: yarn
-
 install:
-  - yarn install
-  - yarn run test:functional:setup
-
+- yarn install
+- yarn run test:functional:setup
 before_script:
-  - yarn run build
-
+- yarn run build
 script:
-  - yarn run test:coverage
-  - yarn run test:functional
-
+- yarn run test:coverage
+- yarn run test:functional
 after_success:
-  - yarn run coveralls
+- yarn run coveralls
+deploy:
+  provider: npm
+  email: devwurm@devwurm.net
+  api_key:
+    secure: oW0AGnet4+YFZXBIKUpx8krX1/TuInAcPF4RfW8/MNRHotmbb2t8cXfM7taXB4LMaHRPkBkV6gFDL6ADIPmyK/pvDGPGsescX405fnrf+itn1M1QK8h2vTvYt9Ce2qO8nPD+Rwi0AbW+aEHfbVgZxTKMX5y/L0GAVoRa+At1E8rNz9aFphxYr2uD5004wzT7N6LTLNFuPw6CpL6/VvAgYc92s36oY/IMluxQfeGU5wTz9MFM06eZW9tGfL14loB5lAAD0MGKyW+rIKUc9xWxLP2bHXYir3GR+oJA0idY0etKwBFkKvK6mTKEO+nP9FRHITWNYuMHH/IdMpgw/xrnDnUa+4fAm0rScGUZwU35LC1nNPgqLWuHefFxb9eLNXkucXBfGHHG5WAOXdzfFPZ6BJFHuMaFQj+4tRE9WSB24/mmn8mBo7Y9jXq39DyJdP/QD4eVw3cLOU3YoKxpV4i3LX6y3G7M4Cbf4HTYxsrvycqiCkLAWMIGTRwuY/8Nil+tumJ+sntTfGNGtLn8XbX+IjSoRoQyorEa08IeR8KGhE1CijSmSj9RP4kxdGBqup4HkbS9cC47S3oqGotlRPZFGpYyjDbByV2pl0KNZRyldKVHueGgLWvl2VT5dMRHU43ixBF36C1LMwJ7Uy66XMGzfThJvLv7O2wmV8o8btXf0Xk=
+  on:
+    tags: true
+    repo: DevWurm/webpack-war-plugin
+  skip_cleanup: true
