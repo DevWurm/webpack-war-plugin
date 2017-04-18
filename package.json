@@ -60,5 +60,8 @@
     ],
     "sourceMap": true,
     "instrument": true
+  },
+  "peerDependencies": {
+    "webpack": ">2.0.0"
   }
 }
