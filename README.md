@@ -1,6 +1,7 @@
 # Webpack WAR plugin
 [![Build Status](https://travis-ci.org/DevWurm/webpack-war-plugin.svg?branch=master)](https://travis-ci.org/DevWurm/webpack-war-plugin)
 [![Coverage Status](https://coveralls.io/repos/github/DevWurm/webpack-war-plugin/badge.svg?branch=master)](https://coveralls.io/github/DevWurm/webpack-war-plugin?branch=master)
+[![Gitter](https://badges.gitter.im/DevWurm/webpack-war-plugin.svg)](https://gitter.im/DevWurm/webpack-war-plugin?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
 This is a [Webpack](https://webpack.github.io/) plugin which simplifies and automates the creation of a [Web Application Archive (WAR)](https://en.wikipedia.org/wiki/WAR_(file_format)) from your Webpack build outputs and other project files. This can be useful if you want to deploy your static / Single Page Web App or your applications web frontend to a Java (EE) Application server.
 
