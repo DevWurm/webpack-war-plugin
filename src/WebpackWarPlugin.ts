@@ -42,7 +42,7 @@ export class WebpackWarPlugin implements Plugin {
 
       Object.getOwnPropertyNames(compilation.assets).forEach(asset => {
         const srcPath = resolve(outputPath, asset);
-        archive.append(srcPath, { name: asset });
+        archive.append(srcPath, { name: normalize(asset) });
       });
 
       additionalElements.forEach(({ path, destPath }) => {

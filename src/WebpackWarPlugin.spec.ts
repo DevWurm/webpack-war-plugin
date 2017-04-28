@@ -144,6 +144,36 @@ describe('WebpackWarPlugin', function () {
         assert.calledWith(spyAppend, resolve((compiler as any).options.output.path, asset), { name: asset }));
     });
 
+    it('Should normalize asset paths', function () {
+      const ArchiverDummy = {
+        append: (() => null),
+        pipe: (() => null),
+        on: (() => null),
+        finalize: (() => null)
+      };
+      const spyAppend = spy(ArchiverDummy, 'append');
+
+      const assets = {
+        './asset1.txt': {},
+        './assets/./asset2.txt': {}
+      };
+
+      compilation.assets = assets;
+
+      const plugin = new WebpackWarPlugin({ archiveName: 'Test' });
+      (plugin as any).archiver = (() => ArchiverDummy);
+      plugin.apply(compiler);
+
+      assert.calledWith(spyAppend,
+        resolve((compiler as any).options.output.path, Object.getOwnPropertyNames(assets)[0]),
+        { name: 'asset1.txt' }
+      );
+      assert.calledWith(spyAppend,
+        resolve((compiler as any).options.output.path, Object.getOwnPropertyNames(assets)[1]),
+        { name: 'assets/asset2.txt' }
+      );
+    });
+
     it('Should add the WEB-INF folder to the archive', function () {
       const ArchiverStub = {
         append: (() => null),
