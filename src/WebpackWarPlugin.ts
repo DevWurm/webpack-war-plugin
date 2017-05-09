@@ -42,7 +42,7 @@ export class WebpackWarPlugin implements Plugin {
 
       Object.getOwnPropertyNames(compilation.assets).forEach(asset => {
         const srcPath = resolve(outputPath, asset);
-        archive.append(srcPath, { name: normalize(asset) });
+        archive.append(readFileSync(srcPath), { name: normalize(asset) });
       });
 
       additionalElements.forEach(({ path, destPath }) => {
@@ -51,7 +51,7 @@ export class WebpackWarPlugin implements Plugin {
         if (lstatSync(srcPath).isDirectory()) {
           archive.directory(srcPath, destPath || normalize(path));
         } else {
-          archive.append(srcPath, { name: destPath || normalize(path) });
+          archive.append(readFileSync(srcPath), { name: destPath || normalize(path) });
         }
       });
 

@@ -1,13 +1,13 @@
 import 'mocha';
 import * as chai from 'chai';
-import { resolve } from 'path';
-import { SinonMock, SinonExpectation, mock, spy, stub, assert } from 'sinon';
+import {resolve} from 'path';
+import {SinonMock, SinonExpectation, mock, spy, stub, assert, match} from 'sinon';
 import * as webpack from 'webpack';
 import Compiler = webpack.Compiler;
 const expect = chai.expect;
 
 import * as fs from 'fs';
-import { WebpackWarPlugin } from './WebpackWarPlugin';
+import {WebpackWarPlugin} from './WebpackWarPlugin';
 import archiver = require('archiver');
 
 describe('WebpackWarPlugin', function () {
@@ -52,7 +52,7 @@ describe('WebpackWarPlugin', function () {
   });
 
   it('Should run without errors', function () {
-    const plugin = new WebpackWarPlugin({ archiveName: 'Test' });
+    const plugin = new WebpackWarPlugin({archiveName: 'Test'});
     expect(() => {
       plugin.apply(compiler);
     }).not.to.throw();
@@ -62,7 +62,7 @@ describe('WebpackWarPlugin', function () {
     it('Should be hooked into the after-emit step', function () {
       const spyPlugin = spy(compiler, 'plugin');
 
-      const plugin = new WebpackWarPlugin({ archiveName: 'Test' });
+      const plugin = new WebpackWarPlugin({archiveName: 'Test'});
       plugin.apply(compiler);
 
       assert.calledWith(spyPlugin, 'after-emit');
@@ -100,7 +100,7 @@ describe('WebpackWarPlugin', function () {
         const archiveName = 'Test';
         expectationCreateWriteStream.once().withExactArgs(`${resolve('./', (compiler as any).options.output.path, `${archiveName}.war`)}`);
 
-        const plugin = new WebpackWarPlugin({ archiveName });
+        const plugin = new WebpackWarPlugin({archiveName});
         plugin.apply(compiler);
 
         expectationCreateWriteStream.verify();
@@ -112,7 +112,7 @@ describe('WebpackWarPlugin', function () {
         const archiveName = 'Test.war';
         expectationCreateWriteStream.once().withExactArgs(`${resolve('./', (compiler as any).options.output.path, `${archiveName}`)}`);
 
-        const plugin = new WebpackWarPlugin({ archiveName });
+        const plugin = new WebpackWarPlugin({archiveName});
         plugin.apply(compiler);
 
         expectationCreateWriteStream.verify();
@@ -129,6 +129,8 @@ describe('WebpackWarPlugin', function () {
         finalize: (() => null)
       };
       const spyAppend = spy(ArchiverDummy, 'append');
+      const stubReadFileSync = stub(fs, 'readFileSync');
+      stubReadFileSync.returns(new Buffer(''));
 
       compilation.assets = {
         'asset1.txt': {},
@@ -136,12 +138,16 @@ describe('WebpackWarPlugin', function () {
         'asset3.blub': {}
       };
 
-      const plugin = new WebpackWarPlugin({ archiveName: 'Test' });
+      const plugin = new WebpackWarPlugin({archiveName: 'Test'});
       (plugin as any).archiver = (() => ArchiverDummy);
       plugin.apply(compiler);
 
-      Object.getOwnPropertyNames(compilation.assets).map(asset =>
-        assert.calledWith(spyAppend, resolve((compiler as any).options.output.path, asset), { name: asset }));
+      Object.getOwnPropertyNames(compilation.assets).map(asset => {
+        assert.calledWith(stubReadFileSync, resolve((compiler as any).options.output.path, asset))
+        assert.calledWith(spyAppend, match.instanceOf(Buffer), {name: asset})
+      });
+
+      stubReadFileSync.restore();
     });
 
     it('Should normalize asset paths', function () {
@@ -152,6 +158,9 @@ describe('WebpackWarPlugin', function () {
         finalize: (() => null)
       };
       const spyAppend = spy(ArchiverDummy, 'append');
+      const stubReadFileSync = stub(fs, 'readFileSync');
+      stubReadFileSync.returns(new Buffer(''));
+
 
       const assets = {
         './asset1.txt': {},
@@ -160,23 +169,37 @@ describe('WebpackWarPlugin', function () {
 
       compilation.assets = assets;
 
-      const plugin = new WebpackWarPlugin({ archiveName: 'Test' });
+      const plugin = new WebpackWarPlugin({archiveName: 'Test'});
       (plugin as any).archiver = (() => ArchiverDummy);
       plugin.apply(compiler);
 
-      assert.calledWith(spyAppend,
+      assert.calledWith(
+        stubReadFileSync,
         resolve((compiler as any).options.output.path, Object.getOwnPropertyNames(assets)[0]),
-        { name: 'asset1.txt' }
+      )
+      assert.calledWith(
+        spyAppend,
+        match.instanceOf(Buffer),
+        {name: 'asset1.txt'}
       );
-      assert.calledWith(spyAppend,
+
+      assert.calledWith(
+        stubReadFileSync,
         resolve((compiler as any).options.output.path, Object.getOwnPropertyNames(assets)[1]),
-        { name: 'assets/asset2.txt' }
+      )
+      assert.calledWith(
+        spyAppend,
+        match.instanceOf(Buffer),
+        {name: 'assets/asset2.txt'}
       );
+
+      stubReadFileSync.restore();
     });
 
     it('Should add the WEB-INF folder to the archive', function () {
       const ArchiverStub = {
         append: (() => null),
+        file: (() => null),
         pipe: (() => null),
         directory: (() => null),
         on: (() => null),
@@ -184,9 +207,9 @@ describe('WebpackWarPlugin', function () {
       };
       const spyDirectory = spy(ArchiverStub, 'directory');
       const stubLstatSync = stub(fs, 'lstatSync');
-      stubLstatSync.returns({ isDirectory: (() => true) });
+      stubLstatSync.returns({isDirectory: (() => true)});
 
-      const plugin = new WebpackWarPlugin({ archiveName: 'Test', webInf: 'WEB-INF' });
+      const plugin = new WebpackWarPlugin({archiveName: 'Test', webInf: 'WEB-INF'});
       (plugin as any).archiver = (() => ArchiverStub);
       plugin.apply(compiler);
 
@@ -208,25 +231,27 @@ describe('WebpackWarPlugin', function () {
       const spyDirectory = spy(ArchiverStub, 'directory');
       const stubLstatSync = stub(fs, 'lstatSync');
       stubLstatSync.callsFake((path: string) => {
-        return { isDirectory: () => path.includes('dir') };
+        return {isDirectory: () => path.includes('dir')};
       });
+      const stubReadFileSync = stub(fs, 'readFileSync');
+      stubReadFileSync.returns(new Buffer(''));
 
       const additionalElements: { path: string, destPath?: string }[] = [
-        { path: './dir1' },
-        { path: 'dir2' },
-        { path: 'dir3', destPath: 'dir' },
-        { path: 'dir4', destPath: 'dir4/dir' },
-        { path: './file1' },
-        { path: 'file2' },
-        { path: 'file3', destPath: 'file' },
-        { path: 'file4', destPath: 'file4/file' }
+        {path: './dir1'},
+        {path: 'dir2'},
+        {path: 'dir3', destPath: 'dir'},
+        {path: 'dir4', destPath: 'dir4/dir'},
+        {path: './file1'},
+        {path: 'file2'},
+        {path: 'file3', destPath: 'file'},
+        {path: 'file4', destPath: 'file4/file'}
       ];
 
-      const plugin = new WebpackWarPlugin({ archiveName: 'Test', additionalElements });
+      const plugin = new WebpackWarPlugin({archiveName: 'Test', additionalElements});
       (plugin as any).archiver = (() => ArchiverStub);
       plugin.apply(compiler);
 
-      additionalElements.forEach(({ path }) => {
+      additionalElements.forEach(({path}) => {
         switch (path) {
           case './dir1':
             return assert.calledWith(spyDirectory, resolve('./', 'dir1'), 'dir1');
@@ -237,17 +262,25 @@ describe('WebpackWarPlugin', function () {
           case 'dir4':
             return assert.calledWith(spyDirectory, resolve('./', 'dir4'), 'dir4/dir');
           case './file1':
-            return assert.calledWith(spyAppend, resolve('./', 'file1'), { name: 'file1' });
+            assert.calledWith(stubReadFileSync, resolve('./', 'file1'));
+            assert.calledWith(spyAppend, match.instanceOf(Buffer), {name: 'file1'});
+            break;
           case 'file2':
-            return assert.calledWith(spyAppend, resolve('./', 'file2'), { name: 'file2' });
+            assert.calledWith(stubReadFileSync, resolve('./', 'file2'));
+            assert.calledWith(spyAppend, match.instanceOf(Buffer), {name: 'file2'});
+            break;
           case 'file3':
-            return assert.calledWith(spyAppend, resolve('./', 'file3'), { name: 'file' });
+            assert.calledWith(stubReadFileSync, resolve('./', 'file3'));
+            assert.calledWith(spyAppend, match.instanceOf(Buffer), {name: 'file'});
+            break;
           case 'file4':
-            return assert.calledWith(spyAppend, resolve('./', 'file4'), { name: 'file4/file' });
+            assert.calledWith(stubReadFileSync, resolve('./', 'file4'));
+            assert.calledWith(spyAppend, match.instanceOf(Buffer), {name: 'file4/file'});
         }
       });
 
       stubLstatSync.restore();
+      stubReadFileSync.restore();
     });
   });
 });
