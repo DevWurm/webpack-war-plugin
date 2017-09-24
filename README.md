@@ -64,7 +64,7 @@ module.exports = {
     new WebpackWarPlugin({
       archiveName: 'archive',
       webInf: './web-inf',
-      additionalElemens: [
+      additionalElements: [
         { path: 'context/context.xml', destPath: 'META-INF/context.xml'},
         { path: 'package.json' },
         { path: 'images', destPath: 'assets/images' }
