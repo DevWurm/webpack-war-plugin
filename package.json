@@ -1,6 +1,6 @@
 {
   "name": "webpack-war-plugin",
-  "version": "1.0.0-beta.2",
+  "version": "1.0.0-beta.3",
   "description": "Webpack plugin for bundling build outputs into a WAR archive",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -8,13 +8,13 @@
   "author": "DevWurm",
   "license": "MIT",
   "scripts": {
-    "prebuild": "yarn run clean",
+    "prebuild": "npm run clean",
     "build": "tsc -d",
     "clean": "rimraf dist",
     "test": "mocha --compilers ts:ts-node/register src/**/*.spec.ts",
-    "test:coverage": "nyc yarn run test",
-    "test:functional:setup": "cd functional_tests && yarn install && yarn run setup",
-    "test:functional": "cd functional_tests && yarn run test",
+    "test:coverage": "nyc npm run test",
+    "test:functional:setup": "cd functional_tests && npm install && npm run setup",
+    "test:functional": "cd functional_tests && npm run test",
     "coveralls": "cat ./coverage/lcov.info | coveralls"
   },
   "dependencies": {

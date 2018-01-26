@@ -4,6 +4,7 @@ import { resolve } from 'path';
 import { SinonMock, SinonExpectation, mock, spy, stub, assert } from 'sinon';
 import * as webpack from 'webpack';
 import Compiler = webpack.Compiler;
+
 const expect = chai.expect;
 
 import * as fs from 'fs';
@@ -248,6 +249,28 @@ describe('WebpackWarPlugin', function () {
       });
 
       stubLstatSync.restore();
+    });
+
+    it('Should add all assets to the archive', function () {
+      const ArchiverDummy = {
+        append: (() => null),
+        pipe: (() => null),
+        on: (() => null),
+        finalize: (() => null)
+      };
+      const spyAppend = spy(ArchiverDummy, 'append');
+
+      const archiverDummyFactory = stub().returns(ArchiverDummy);
+
+      const archiverOptions = {
+        option: 'value',
+      };
+
+      const plugin = new WebpackWarPlugin({ archiverOptions: archiverOptions });
+      (plugin as any).archiver = archiverDummyFactory;
+      plugin.apply(compiler);
+
+      assert.calledWithExactly(archiverDummyFactory, 'zip', archiverOptions)
     });
   });
 });

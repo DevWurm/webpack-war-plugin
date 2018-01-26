@@ -14,7 +14,8 @@ import { readFileSync } from 'fs';
 export type WebpackWarPluginOptions = {
   archiveName?: string,
   webInf?: string,
-  additionalElements?: { path: string, destPath?: string }[]
+  additionalElements?: { path: string, destPath?: string }[],
+  archiverOptions?: archiver.Options,
 }
 
 export class WebpackWarPlugin implements Plugin {
@@ -30,13 +31,15 @@ export class WebpackWarPlugin implements Plugin {
     const archiveBaseName = this.options.archiveName || JSON.parse(readFileSync(resolve(context, 'package.json')).toString()).name;
     const archiveName = extname(archiveBaseName) == '' ? `${archiveBaseName}.war` : archiveBaseName;
 
+    const archiverOptions = this.options.archiverOptions || { store: true };
+
     const additionalElements = (this.options.additionalElements || [])
       .concat(this.options.webInf ? { path: this.options.webInf, destPath: 'WEB-INF' } : []);
 
     const outputPath = (compiler['options']['output'] ? compiler['options']['output']['path'] : null) || compiler['outputPath'];
 
     compiler.plugin('after-emit', (compilation: { assets: {[name: string]: any} }, cb: Function) => {
-      const archive = this.archiver('zip', { store: true });
+      const archive = this.archiver('zip', archiverOptions);
       const outStream = createWriteStream(resolve(outputPath, archiveName));
       archive.pipe(outStream);
 
