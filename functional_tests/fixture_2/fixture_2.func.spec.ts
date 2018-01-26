@@ -11,7 +11,7 @@ describe('Fixture 2: adding WEB-INF folder', function () {
 
   before('Run webpack build', function () {
     cd(resolve(__dirname));
-    const { code, stderr, stdout } = exec('yarn run build');
+    const { code, stderr, stdout } = exec('npm run build');
 
     if (code != 0) return expect.fail(stderr, '', 'Webpack build failed');
 

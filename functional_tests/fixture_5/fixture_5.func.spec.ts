@@ -11,7 +11,7 @@ describe('Fixture 5: specifying a different archive name', function () {
 
   before('Run webpack build', function () {
     cd(resolve(__dirname));
-    const { code, stderr, stdout } = exec('yarn run build');
+    const { code, stderr, stdout } = exec('npm run build');
 
     if (code != 0) return expect.fail(stderr, '', 'Webpack build failed');
 

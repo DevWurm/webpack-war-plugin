@@ -3,17 +3,17 @@ node_js:
 - node
 - 7
 - 6
-cache: yarn
+cache: npm
 install:
-- yarn install
-- yarn run test:functional:setup
+- npm install
+- npm run test:functional:setup
 before_script:
-- yarn run build
+- npm run build
 script:
-- yarn run test:coverage
-- yarn run test:functional
+- npm run test:coverage
+- npm run test:functional
 after_success:
-- yarn run coveralls
+- npm run coveralls
 deploy:
   provider: npm
   email: devwurm@devwurm.net

@@ -5,7 +5,7 @@ import { resolve } from 'path';
 fixtureDirectories(__dirname).forEach(dir => {
   console.log(`Setting up fixture ${dir}`);
   cd(dir);
-  exec('yarn install');
+  exec('npm install');
   cd(__dirname);
 });
 
