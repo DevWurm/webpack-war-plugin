@@ -42,6 +42,7 @@ type WebpackWarPluginOptions = {
         path: string;
         destPath?: string;
     }[];
+    archiverOptions?: {}
 };
 ```
 | Option | Effect |
@@ -49,6 +50,7 @@ type WebpackWarPluginOptions = {
 | `archiveName` *[optional]* | Sets the output name of the archive |
 | `webInf` *[optional]* | Specifies a path to a directory (or file) which will be included into the archive with the path `WEB-INF` |
 | `additionalElements` *[optional]* | Specifies multiple files or directories, which will be included in the archive. Each entry is a object with the following properties: `path` (The path of the source element), `destPath` (*[optional]* The path of the specified file / directory inside of the archive [by default `path` is used])  |
+| `archiverOptions` *[optional]* | Specifies the options that should be used by `archiver` (used to create the archive). See https://archiverjs.com/docs/ for more information. |
 
 ### Example
 The following plugin configuration:
@@ -68,7 +70,12 @@ module.exports = {
         { path: 'context/context.xml', destPath: 'META-INF/context.xml'},
         { path: 'package.json' },
         { path: 'images', destPath: 'assets/images' }
-      ]
+      ],
+      archiverOptions: {
+        zlib: {
+          level: 9
+        }
+      }
     }),
     ...
   ],
