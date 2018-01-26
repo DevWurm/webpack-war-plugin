@@ -15,7 +15,7 @@ export type WebpackWarPluginOptions = {
   archiveName?: string,
   webInf?: string,
   additionalElements?: { path: string, destPath?: string }[],
-  archiverOptions?: {}
+  archiverOptions?: archiver.Options,
 }
 
 export class WebpackWarPlugin implements Plugin {
@@ -31,7 +31,7 @@ export class WebpackWarPlugin implements Plugin {
     const archiveBaseName = this.options.archiveName || JSON.parse(readFileSync(resolve(context, 'package.json')).toString()).name;
     const archiveName = extname(archiveBaseName) == '' ? `${archiveBaseName}.war` : archiveBaseName;
 
-    const archiverOptions = this.options.archiverOptions || { store: true }
+    const archiverOptions = this.options.archiverOptions || { store: true };
 
     const additionalElements = (this.options.additionalElements || [])
       .concat(this.options.webInf ? { path: this.options.webInf, destPath: 'WEB-INF' } : []);
