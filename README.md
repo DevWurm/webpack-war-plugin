@@ -6,11 +6,8 @@
 This is a [Webpack](https://webpack.github.io/) plugin which simplifies and automates the creation of a [Web Application Archive (WAR)](https://en.wikipedia.org/wiki/WAR_(file_format)) from your Webpack build outputs and other project files. This can be useful if you want to deploy your static / Single Page Web App or your applications web frontend to a Java (EE) Application server.
 
 ## Installation
-You can install the plugin via yarn
-```bash
-yarn add --dev webpack-war-plugin
-```
-or via npm
+You can install the plugin via npm
+
 ```bash
 npm install --dev webpack-war-plugin
 ```
@@ -109,7 +106,7 @@ The plugin is built with [Typescript](http://www.typescriptlang.org/) and the re
 ### Building
 After checking out the project you can build transpile the Typescript via
 ```bash
-yarn run build
+npm run build
 ```
 The build output is stored in `dist`.
 
@@ -118,22 +115,22 @@ The build output is stored in `dist`.
 Unit tests are named `[tested-component].spec.ts`.<br>
 They can be run via [Mocha](https://mochajs.org/) with
 ```bash
-yarn run test
+npm run test
 ```
 Test coverage is measured via [nyc](https://github.com/istanbuljs/nyc) and can be triggered with
 ```bash
-yarn run test:coverage
+npm run test:coverage
 ```
 
 #### Functional tests
 Functional test fixtures are located in `functional_tests`.
 To set up all fixtures run
 ```bash
-yarn run test:functional:setup
+npm run test:functional:setup
 ```
 To execute the tests via Mocha run
 ```bash
-yarn run test:functional
+npm run test:functional
 ```
 
 ### Continuous integration
