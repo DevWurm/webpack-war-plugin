@@ -1,6 +1,6 @@
 import webpack = require('webpack');
 import Compiler = webpack.Compiler;
-import Plugin = webpack.Plugin;
+// import Plugin = webpack.Plugin;
 
 import { resolve, extname, posix } from 'path';
 const normalize = posix.normalize;
@@ -15,10 +15,10 @@ export type WebpackWarPluginOptions = {
   archiveName?: string,
   webInf?: string,
   additionalElements?: { path: string, destPath?: string }[],
-  archiverOptions?: archiver.Options,
+  archiverOptions?: archiver.ArchiverOptions,
 }
 
-export class WebpackWarPlugin implements Plugin {
+export class WebpackWarPlugin {
   // private archiver property to inject a Mock archiver in tests
   private archiver = archiver;
 
@@ -38,7 +38,7 @@ export class WebpackWarPlugin implements Plugin {
 
     const outputPath = (compiler['options']['output'] ? compiler['options']['output']['path'] : null) || compiler['outputPath'];
 
-    compiler.plugin('after-emit', (compilation: { assets: {[name: string]: any} }, cb: Function) => {
+    compiler.hooks.afterEmit.tapAsync('after-emit', (compilation: { assets: {[name: string]: any} }, cb: Function) => {
       const archive = this.archiver('zip', archiverOptions);
       const outStream = createWriteStream(resolve(outputPath, archiveName));
       archive.pipe(outStream);
@@ -69,11 +69,11 @@ export class WebpackWarPlugin implements Plugin {
         console.error(bold(red(`Error while creating WAR archive: ${err}`)));
       });
 
-      compiler.plugin('done', () => {
+      compiler.hooks.done.tap('done', () => {
         archive.finalize();
       });
 
-      compiler.plugin('failed', () => {
+      compiler.hooks.failed.tap('failed', () => {
         archive.finalize();
       });
 
