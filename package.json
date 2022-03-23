@@ -1,12 +1,11 @@
 {
-  "name": "webpack-war-plugin",
+  "name": "webpack-v5-war-plugin",
   "version": "1.0.0",
-  "description": "Webpack plugin for bundling build outputs into a WAR archive",
+  "description": "Webpack v5 plugin for bundling build outputs into a WAR archive",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
-  "repository": "https://github.com/DevWurm/webpack-war-plugin",
-  "author": "DevWurm",
-  "license": "MIT",
+  "repository": "https://github.com/stertheweb/webpack-war-plugin",
+  "author": "stertheweb",
   "scripts": {
     "prebuild": "npm run clean",
     "build": "tsc -d",
@@ -65,6 +64,6 @@
     "instrument": true
   },
   "peerDependencies": {
-    "webpack": ">2.0.0"
+    "webpack": ">5.0.0"
   }
 }
